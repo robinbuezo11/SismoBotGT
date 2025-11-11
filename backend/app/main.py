@@ -1,13 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes.chatbot import router as chatbot_router
+from app.routes.chatbot_routes import router as chatbot_router
 
 app = FastAPI(title="Chatbot Informativo sobre Sismos en Guatemala")
 
 # Configuración de CORS
 app.add_middleware(
   CORSMiddleware,
-  allow_origins=["*"],  # Puedes restringirlo al dominio del frontend
+  allow_origins=["*"],
   allow_credentials=True,
   allow_methods=["*"],
   allow_headers=["*"],

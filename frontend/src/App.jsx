@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
 import "./App.css";
 
 function App() {
@@ -12,8 +11,15 @@ function App() {
     const nuevoMensaje = { remitente: "usuario", texto: mensaje };
     setHistorial([...historial, nuevoMensaje]);
 
-    const res = await axios.post("http://localhost:8000/api/chat", { mensaje });
-    const respuesta = { remitente: "chatbot", texto: res.data.respuesta };
+    const res = await fetch("http://localhost:8000/api/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ "message": mensaje }),
+    });
+    const data = await res.json();
+    const respuesta = { remitente: "chatbot", texto: data.answer };
 
     setHistorial([...historial, nuevoMensaje, respuesta]);
     setMensaje("");
