@@ -8,6 +8,7 @@ class Settings:
     
     GROQ_API_KEY: str = os.getenv("GROQ_API_KEY")
     MODEL_NAME: str = os.getenv("GROQ_MODEL_ID")
+    MAX_HISTORY_MODEL: int = int(os.getenv("MAX_HISTORY_MODEL", "10"))
 
     MYSQL_HOST: str = os.getenv("MYSQL_HOST", "localhost")
     MYSQL_PORT: str = os.getenv("MYSQL_PORT", "3306")

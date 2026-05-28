@@ -5,18 +5,20 @@ from datetime import datetime, timezone
 from typing import Union, List, Dict
 
 from app.utils.cache import get_cache, set_cache
-from app.utils.geo import is_in_country
+from app.utils.geo import is_in_country, normalize_country
 
 
 USGS_URL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson"
 
 
 def obtener_sismos_recientes_usgs(pais: str = "Guatemala") -> Union[Dict, List[Dict]]:
+    pais = normalize_country(pais)
     cache_key = f"sismos_usgs_{pais.lower()}"
 
     cached_data = get_cache(cache_key)
     
     if cached_data:
+        cached_data["source"] = "cache"
         return cached_data
 
     try:
@@ -27,10 +29,8 @@ def obtener_sismos_recientes_usgs(pais: str = "Guatemala") -> Union[Dict, List[D
         cached_data = get_cache(cache_key)
 
         if cached_data:
-            return {
-                "source": "cache",
-                "data": cached_data
-            }
+            cached_data["source"] = "cache"
+            return cached_data
 
         return {"error": f"Error al consultar USGS: {e}"}
 
@@ -62,7 +62,7 @@ def obtener_sismos_recientes_usgs(pais: str = "Guatemala") -> Union[Dict, List[D
         eventos.append({
             "magnitud": props.get("mag"),
             "lugar": props.get("place", ""),
-            "pais": pais,
+            "pais": pais.title(),
             "latitud": lat,
             "longitud": lon,
             "hora": hora_iso,
@@ -73,10 +73,16 @@ def obtener_sismos_recientes_usgs(pais: str = "Guatemala") -> Union[Dict, List[D
     eventos.sort(key=lambda x: x["magnitud"] or 0, reverse=True)
 
     if not eventos:
-        return {"mensaje": f"No se reportan sismos recientes en {pais}."}
+        return {
+            "pais": pais.title(),
+            "cantidad": 0,
+            "sismos": [],
+            "mensaje": f"No se encontraron sismos recientes en {pais.title()}."
+        }
 
     resultado = {
-        "pais": pais,
+        "source": "api",
+        "pais": pais.title(),
         "cantidad": len(eventos),
         "sismos": eventos
     }

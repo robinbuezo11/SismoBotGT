@@ -24,7 +24,7 @@ export default function App() {
           messages.length === 0 ? (
             <WelcomeScreen onSelect={sendMessage} />
           ) : (
-            <ChatWindow messages={messages} />
+            <ChatWindow messages={messages} loading={loading} />
           )
         }
       </div>
