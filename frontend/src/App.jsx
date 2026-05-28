@@ -1,51 +1,35 @@
-import React, { useState } from "react";
-import "./App.css";
+import Header from './components/Header';
+import ChatWindow from './components/ChatWindow';
+import ChatInput from './components/ChatInput';
+import WelcomeScreen from './components/WelcomeScreen';
 
-function App() {
-  const [mensaje, setMensaje] = useState("");
-  const [historial, setHistorial] = useState([]);
+import { useChat } from './hooks/useChat';
 
-  const enviarMensaje = async () => {
-    if (!mensaje.trim()) return;
-
-    const nuevoMensaje = { remitente: "usuario", texto: mensaje };
-    setHistorial([...historial, nuevoMensaje]);
-
-    const res = await fetch("http://localhost:8000/api/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ "message": mensaje }),
-    });
-    const data = await res.json();
-    const respuesta = { remitente: "chatbot", texto: data.answer };
-
-    setHistorial([...historial, nuevoMensaje, respuesta]);
-    setMensaje("");
-  };
+export default function App() {
+  const { messages, loading, sendMessage } = useChat();
 
   return (
-    <div className="App">
-      <h2>Chatbot Informativo sobre Sismos en Guatemala</h2>
-      <div className="chatbox">
-        {historial.map((msg, i) => (
-          <div key={i} className={`msg ${msg.remitente}`}>
-            {msg.texto}
-          </div>
-        ))}
+    <div
+      className="
+        h-screen
+        flex
+        flex-col
+        bg-gray-100
+      "
+    >
+      <Header />
+
+      <div className="flex-1 overflow-hidden flex flex-col">
+        {
+          messages.length === 0 ? (
+            <WelcomeScreen onSelect={sendMessage} />
+          ) : (
+            <ChatWindow messages={messages} />
+          )
+        }
       </div>
-      <div className="input-area">
-        <input
-          type="text"
-          placeholder="Escribe tu pregunta..."
-          value={mensaje}
-          onChange={(e) => setMensaje(e.target.value)}
-        />
-        <button onClick={enviarMensaje}>Enviar</button>
-      </div>
+
+      <ChatInput onSend={sendMessage} loading={loading} />
     </div>
   );
 }
-
-export default App;

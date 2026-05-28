@@ -1,24 +1,20 @@
 # app/services/chatbot_service.py
 from langchain_groq import ChatGroq
+
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.runnables.history import RunnableWithMessageHistory
-from langchain_core.chat_history import BaseChatMessageHistory
-from langchain_core.messages import HumanMessage, AIMessage
+from langchain_community.chat_message_histories import ChatMessageHistory
+
 from app.core.config import settings
 from app.core.prompts import base_prompt
 
-_history_store: dict[str, BaseChatMessageHistory] = {}
+store = {}
 
-def get_session_history(session_id: str) -> BaseChatMessageHistory:
-    if session_id not in _history_store:
-        class InMemoryHistory(BaseChatMessageHistory):
-            messages: list = []
-            def add_messages(self, msgs):
-                self.messages.extend(msgs)
-            def clear(self):
-                self.messages = []
-        _history_store[session_id] = InMemoryHistory()
-    return _history_store[session_id]
+def get_session_history(session_id: str):
+    if session_id not in store:
+        store[session_id] = ChatMessageHistory()
+
+    return store[session_id]
 
 def get_chatbot():
     llm = ChatGroq(
@@ -33,10 +29,10 @@ def get_chatbot():
         ("human", "{input}")
     ])
 
-    base_chain = prompt | llm
+    chain = prompt | llm
 
     chatbot = RunnableWithMessageHistory(
-        base_chain,
+        chain,
         get_session_history,
         input_messages_key="input",
         history_messages_key="history",
