@@ -19,4 +19,7 @@ class Settings:
     REDIS_HOST: str = os.getenv("REDIS_HOST", "localhost")
     REDIS_PORT: str = os.getenv("REDIS_PORT", "6379")
 
+    INSIVUMEH_URL: str = os.getenv("INSIVUMEH_URL")
+    USGS_URL: str = os.getenv("USGS_URL")
+
 settings = Settings()

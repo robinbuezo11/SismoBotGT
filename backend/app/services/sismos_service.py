@@ -7,9 +7,10 @@ from typing import Union, List, Dict
 from app.utils.cache import get_cache, set_cache
 from app.utils.geo import is_in_country, normalize_country
 
+from app.core.config import settings
 
-USGS_URL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson"
 
+USGS_API_URL = settings.USGS_URL
 
 def obtener_sismos_recientes_usgs(pais: str = "Guatemala") -> Union[Dict, List[Dict]]:
     pais = normalize_country(pais)
@@ -22,7 +23,7 @@ def obtener_sismos_recientes_usgs(pais: str = "Guatemala") -> Union[Dict, List[D
         return cached_data
 
     try:
-        resp = requests.get(USGS_URL, timeout=10)
+        resp = requests.get(USGS_API_URL, timeout=10)
         resp.raise_for_status()
         data = resp.json()
     except requests.RequestException as e:

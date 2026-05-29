@@ -1,0 +1,44 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A"></stop>
+      <stop offset="100%" stop-color="#1E3A8A"></stop>
+    </linearGradient>
+
+    <linearGradient id="chat" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8"></stop>
+      <stop offset="100%" stop-color="#22C55E"></stop>
+    </linearGradient>
+  </defs>
+
+  <!-- Fondo -->
+  <rect width="512" height="512" rx="120" fill="url(#bg)"></rect>
+
+  <!-- Burbuja chatbot -->
+  <rect x="96" y="96" width="320" height="240" rx="40" fill="url(#chat)"></rect>
+
+  <!-- Cola del chat -->
+  <path d="M180 336 L150 400 L235 350 Z" fill="#22C55E"></path>
+
+  <!-- Cara robot -->
+  <circle cx="200" cy="190" r="18" fill="#0F172A"></circle>
+  <circle cx="312" cy="190" r="18" fill="#0F172A"></circle>
+
+  <!-- Sonrisa -->
+  <path d="M190 255 Q256 300 322 255" stroke="#0F172A" stroke-width="12" fill="none" stroke-linecap="round"></path>
+
+  <!-- Ondas sísmicas -->
+  <path d="M90 430 
+           L140 400 
+           L180 445 
+           L230 360 
+           L280 430 
+           L330 390 
+           L380 455 
+           L430 410" fill="none" stroke="#FACC15" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"></path>
+
+  <!-- Texto -->
+  <text x="256" y="485" text-anchor="middle" font-family="Arial, sans-serif" font-size="38" font-weight="bold" fill="#FFFFFF">
+    SismoBotGT
+  </text>
+</svg>

@@ -40,10 +40,25 @@ async def chat(request: Request, db: Session = Depends(get_db)):
         contexto_sismico = construir_contexto_sismico(datos_usgs, datos_insivumeh)
 
         prompt_sismico = f"""
-            El usuario consultó sobre información sísmica.
-            Consulta del usuario: "{user_message}"
-            Contexto sísmico reciente: {contexto_sismico}
-            Proporciona una respuesta clara y concisa basada en el contexto sísmico. Educativa y resumida.
+            Consulta del usuario:
+            "{user_message}"
+
+            Contexto sísmico disponible:
+            {contexto_sismico}
+
+            Instrucciones IMPORTANTES:
+
+            - No inventes sismos.
+            - No inventes magnitudes.
+            - No inventes fechas.
+            - No inventes ubicaciones.
+            - Si la información no existe en el contexto, dilo claramente.
+            - No agregues ejemplos ficticios.
+            - No inventes datos faltantes.
+            - No repitas eventos.
+            - Si es alguna consulta general, respondela pero con bases claras, sin inventar y de forma académica y profesional.
+
+            Responde en Markdown.
         """
 
         result = await chatbot.ainvoke(

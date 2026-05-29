@@ -7,11 +7,13 @@ from typing import Union, List, Dict
 
 from app.utils.cache import get_cache, set_cache
 
+from app.core.config import settings
+
 urllib3.disable_warnings(
     urllib3.exceptions.InsecureRequestWarning
 )
 
-INSIVUMEH_MAP_URL = "https://geo.insivumeh.gob.gt/MAPA_SISMOS/"
+INSIVUMEH_MAP_URL = settings.INSIVUMEH_URL
 
 
 def obtener_sismos_recientes_insivumeh() -> Union[Dict, List[Dict]]:
