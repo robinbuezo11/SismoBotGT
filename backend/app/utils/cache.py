@@ -9,7 +9,7 @@ redis_client = redis.Redis(
     decode_responses=True
 )
 
-def set_cache(key: str, value: dict, expire_seconds: int = 3600):
+def set_cache(key: str, value: dict, expire_seconds: int = 600):
     redis_client.set(
         key,
         json.dumps(value),
