@@ -75,6 +75,7 @@ def obtener_sismos_recientes_usgs(pais: str = "Guatemala") -> Union[Dict, List[D
 
     if not eventos:
         return {
+            "source": "api",
             "pais": pais.title(),
             "cantidad": 0,
             "sismos": [],

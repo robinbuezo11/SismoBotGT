@@ -75,7 +75,8 @@ async def chat(request: Request, db: Session = Depends(get_db)):
             "metadata": {
                 "tipo": "sismos",
                 "pais": pais_detectado.title(),
-                "fuentes": ["USGS", "INSIVUMEH"] if datos_insivumeh else ["USGS"]
+                "fuentes": ["USGS", "INSIVUMEH"] if datos_insivumeh else ["USGS"],
+                "sources": [datos_usgs.get("source"), datos_insivumeh.get("source")] if datos_insivumeh else [datos_usgs.get("source")]
             }
         }
 
