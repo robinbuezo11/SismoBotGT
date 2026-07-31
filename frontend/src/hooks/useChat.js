@@ -29,9 +29,9 @@ export function useChat() {
 
             const botMessage = {
                 role: 'assistant',
-                content: typeof response.data.answer === 'string' 
-                    ? response.data.answer 
-                    : JSON.stringify(response.data.answer, null, 2),
+                content: response.data.answer,
+                events: response.data.events || [],
+                metadata: response.data.metadata || null,
             };
 
             setMessages((prev) => [...prev, botMessage]);

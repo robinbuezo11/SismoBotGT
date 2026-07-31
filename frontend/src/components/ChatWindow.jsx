@@ -23,6 +23,8 @@ export default function ChatWindow({ messages, loading }) {
                     key={idx}
                     role={msg.role}
                     content={msg.content}
+                    events={msg.events}
+                    metadata={msg.metadata}
                 />
             ))}
             {loading && (

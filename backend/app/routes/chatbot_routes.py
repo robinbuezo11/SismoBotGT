@@ -7,7 +7,10 @@ from app.services.sismos_service import obtener_sismos_recientes_usgs
 from app.services.insivumeh_service import obtener_sismos_recientes_insivumeh
 from app.services.chatbot_service import get_chatbot
 from app.services.intention_service import detect_intent
-from app.services.response_builder import construir_contexto_sismico
+from app.services.response_builder import (
+    construir_contexto_sismico,
+    construir_eventos_sismicos
+)
 
 from app.database.connection import get_db
 from app.repositories.conversation_repository import save_conversation
@@ -43,7 +46,7 @@ async def chat(request: Request, db: Session = Depends(get_db)):
             Consulta del usuario:
             "{user_message}"
 
-            Contexto sísmico disponible:
+            Contexto sísmico:
             {contexto_sismico}
 
             Instrucciones IMPORTANTES:
@@ -68,13 +71,18 @@ async def chat(request: Request, db: Session = Depends(get_db)):
 
         content = result.content if hasattr(result, "content") else str(result)
 
+        eventos = construir_eventos_sismicos(datos_usgs, datos_insivumeh)
+
         save_conversation(db, user_id, user_message, content)
 
         return {
             "answer": content,
+            "events": eventos[:20],
             "metadata": {
                 "tipo": "sismos",
                 "pais": pais_detectado.title(),
+                "cantidad": len(eventos),
+                "mostrado": min(len(eventos), 20),
                 "fuentes": ["USGS", "INSIVUMEH"] if datos_insivumeh else ["USGS"],
                 "sources": [datos_usgs.get("source"), datos_insivumeh.get("source")] if datos_insivumeh else [datos_usgs.get("source")]
             }
